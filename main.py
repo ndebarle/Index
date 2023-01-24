@@ -11,7 +11,8 @@ def recupere_titre(URL):
     try:
         with urllib.request.urlopen(URL) as f:
             soup = BeautifulSoup(f, 'html.parser')
-            print(soup.title)
+            titres[URL] = word_tokenize(soup.title.string)
+            print(URL, "OK", soup.title.string)            
     except:
         print('Erreur sur le lien', URL)
 
@@ -22,6 +23,6 @@ with open("crawled_urls.json", "r") as f:
 print("Nombre de documents :", len(data))
 
 for url in data:
-    print(word_tokenize("Bonjour, c'est pour tester, s'il vous plait"))
     recupere_titre(url)
-    print(titres)
+
+print(titres)
