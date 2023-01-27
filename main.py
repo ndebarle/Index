@@ -1,28 +1,14 @@
-import json
-import urllib.request
-from bs4 import BeautifulSoup
-import nltk
-from nltk.tokenize import word_tokenize
-nltk.download('punkt')
+from index.opener import openFile
+from index.extracter import extractTitles
+from index.statistics import countToken
 
-titres = {}
-
-def recupere_titre(URL):
-    try:
-        with urllib.request.urlopen(URL) as f:
-            soup = BeautifulSoup(f, 'html.parser')
-            titres[URL] = word_tokenize(soup.title.string)
-            print(URL, "OK", soup.title.string)            
-    except:
-        print('Erreur sur le lien', URL)
 
 # Charger les données à partir du fichier JSON
-with open("crawled_urls.json", "r") as f:
-    data = json.load(f)
-
+    
+data = openFile("crawled_urls.json")
 print("Nombre de documents :", len(data))
 
-for url in data:
-    recupere_titre(url)
+# Compter le nombre de tokens
+titres = extractTitles(data)
+print("Nombre de tokens :", countToken(titres))
 
-print(titres)
